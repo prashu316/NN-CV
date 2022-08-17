@@ -3,7 +3,7 @@ import tensorflow_datasets as tfds
 from tensorflow_examples.models.pix2pix import pix2pix
 from IPython.display import clear_output
 import matplotlib.pyplot as plt
-
+!pip install -q git+https://github.com/tensorflow/examples.git
 
 
 dataset, info = tfds.load('oxford_iiit_pet:3.*.*', with_info=True)
