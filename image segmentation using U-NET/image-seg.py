@@ -164,4 +164,37 @@ callbacks = [
 
 # Train the model, doing validation at the end of each epoch.
 epochs = 15
-model.fit(train_ds, epochs=epochs, validation_data=val_ds, callbacks=callbacks)
+#model.fit(train_ds, epochs=epochs, validation_data=val_ds, callbacks=callbacks)
+
+model.load_weights('oxford_segmentation.h5')
+
+val_gen = OxfordPets(batch_size, img_size, val_input_img_paths, val_target_img_paths)
+val_preds = model.predict(val_gen)
+
+
+def display_mask(i):
+    """Quick utility to display a model's prediction."""
+    mask = np.argmax(val_preds[i], axis=-1)
+    mask = np.expand_dims(mask, axis=-1)
+    img = ImageOps.autocontrast(keras.preprocessing.image.array_to_img(mask))
+    plt.imshow(img)
+    plt.show()
+    display(img)
+
+i = 9
+
+# Display input image
+display(Image(filename=val_input_img_paths[i]))
+
+# Display ground-truth target mask
+img1 = ImageOps.autocontrast(load_img(val_input_img_paths[i]))
+img2 = ImageOps.autocontrast(load_img(val_target_img_paths[i]))
+plt.subplot(1, 2, 1)
+plt.imshow(tf.keras.utils.array_to_img(img2))
+plt.subplot(1, 2, 2)
+plt.imshow(tf.keras.utils.array_to_img(img1))
+plt.axis('off')
+plt.show()
+
+# Display mask predicted by our model
+display_mask(i)
