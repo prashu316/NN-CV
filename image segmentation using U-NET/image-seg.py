@@ -136,7 +136,7 @@ outputs = layers.Conv2D(num_classes, 3, activation="softmax", padding="same")(x)
 # Define the model
 model = keras.Model(inputs, outputs)
 
-model.summary()
+#model.summary()
 
 #train test
 import random
@@ -177,24 +177,28 @@ def display_mask(i):
     mask = np.argmax(val_preds[i], axis=-1)
     mask = np.expand_dims(mask, axis=-1)
     img = ImageOps.autocontrast(keras.preprocessing.image.array_to_img(mask))
+    plt.subplot(1,3,3)
     plt.imshow(img)
-    plt.show()
+    #plt.show()
     display(img)
 
-i = 9
+
 
 # Display input image
-display(Image(filename=val_input_img_paths[i]))
+#display(Image(filename=val_input_img_paths[i]))
 
 # Display ground-truth target mask
-img1 = ImageOps.autocontrast(load_img(val_input_img_paths[i]))
-img2 = ImageOps.autocontrast(load_img(val_target_img_paths[i]))
-plt.subplot(1, 2, 1)
-plt.imshow(tf.keras.utils.array_to_img(img2))
-plt.subplot(1, 2, 2)
-plt.imshow(tf.keras.utils.array_to_img(img1))
-plt.axis('off')
-plt.show()
+for i in range(15,20):
+    img1 = ImageOps.autocontrast(load_img(val_input_img_paths[i]))
+    img2 = ImageOps.autocontrast(load_img(val_target_img_paths[i]))
+    plt.subplot(1, 3, 1)
+    plt.imshow(tf.keras.utils.array_to_img(img2))
+    plt.axis('off')
+    plt.subplot(1, 3, 2)
+    plt.imshow(tf.keras.utils.array_to_img(img1))
+    plt.axis('off')
+    display_mask(i)
+    plt.axis('off')
+    plt.show()
 
 # Display mask predicted by our model
-display_mask(i)
